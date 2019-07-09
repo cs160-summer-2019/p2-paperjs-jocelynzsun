@@ -60,13 +60,32 @@
 			function myGradientInteraction(){
 				var tool = new paper.Tool();
 
-				tool.onMouseDown = function (event) {
-
-				}
-
+				let path = new paper.Path();
+        
+        path.add(new paper.Point(200, 300));
+        path.add(new paper.Point(500, 300));
+        path.add(new paper.Point(500, 500));
+        path.add(new paper.Point(200, 500));
+        
+        path.closed = true;
+        
+        path.fillColor = 'red';
+        path.strokeWidth = 5;
+        
 				tool.onMouseUp = function (event) {
 					
-				}
+          let start = cp.history[cp.history.length - 2];
+          let finish = cp.history[cp.history.length - 1];
+          
+          path.fillColor = {
+            gradient: {
+              stops: [start, finish]
+            },
+            origin: event.downPoint,
+            destination: event.point,
+          };
+          
+				};
 			}
 
 			// your custom interaction goes here!
