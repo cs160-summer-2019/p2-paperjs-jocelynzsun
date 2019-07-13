@@ -27,6 +27,11 @@
 			border-radius: 12px;
 			margin: 3px;
 		}
+    
+    .swatch:hover{
+      border-style: solid;
+      border-width: 2px;
+    }
 
 		#myCanvas {
 			padding-left: 0;
@@ -35,6 +40,10 @@
 		    margin-right: auto;
 		    display: block;
 		}
+    
+    #recent-palette{
+      
+    }
 	</style>
 
 	<script type="text/javascript" canvas="canvas">
@@ -52,7 +61,8 @@
 			var cp = {
 				history: ["#000000"], // black selected by default
 				options: [],
-				$container: $('#color-palette')
+				$container: $('#color-palette'),
+        recent: []
 			}
 
 			// your rectangle gradient interaction goes in this function
@@ -97,10 +107,26 @@
 				    var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
 				    if (hit) {
 				        hit.item.fillColor = cp.history[cp.history.length - 1];
+                createRecentPalette(cp.history[cp.history.length - 1]);
 				    }
 				}
 			}
 
+      // create a color palette for recently used colors
+      function createRecentPalette(color){
+        var $swatch = $("<div>").css("background-color", color).addClass("swatch");
+        $swatch.click(function(){
+          cp.history.push($(this).css("background-color"));
+        });
+        
+        // this array membership checking doesnt work.
+        if (cp.recent.includes(color)){
+          return;
+        } else {
+          $("#recent-palette").append($swatch);
+        }
+        
+      }
 
 			// create a color palette with the given colors
 			function createColorPalette(colors){
@@ -163,5 +189,6 @@
 
 	<canvas id="myCanvas" width="750px" height="750px"></canvas>
 	<div id="color-palette"></div>
+  <div id="recent-palette"></div>
 </body>
 </html>
